@@ -3,17 +3,17 @@
 Author and Contact Information
 ------------------------------
 
-Katharina J. Hoff
+Katharina J. Hoff [1,2] and  Volkmar Liebscher [1]
 
-University of Greifswald,
-Institute for Mathematics and Computer Science,
-Walther-Rathenau-Str. 47,
-17489 Greifswald
+[1] University of Greifswald,
+    Institute for Mathematics and Computer Science,
+    Walther-Rathenau-Str. 47,
+    17489 Greifswald
 
-University of Greifswald,
-Center for Functional Genomics of Microbes,
-Felix-Hausdorff-Str. 8,
-17489 Greifswald
+[2] University of Greifswald,
+    Center for Functional Genomics of Microbes,
+    Felix-Hausdorff-Str. 8,
+    17489 Greifswald
 
 katharina.hoff@uni-greifswald.de
 
@@ -112,6 +112,8 @@ cell1.1  cell1.2  cell1.3
 
 ```
 Executing the parser with this input set will result in an output file of 471 lines.
+
+Additionally, we provide a file with R code (example/data_fin.R) that we used for compute spatial statistics plots that will be presented in the manuscript of Petersen et al. (2019). The R script assumes that a large set of coordinates has been generated from various different cells. It doesn't make much sense to run it with data from the three cell slices that we provide for testing the parser functionality.
 
 Output of Reconstruct-Parser
 ============================
