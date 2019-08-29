@@ -213,10 +213,6 @@ for (i in 1:length(a1)){
   plot(env.g2,add=TRUE,col="orange",shadecol=rgb(1,1,0,alpha=0.3))
   plot(env.g3,add=TRUE,col="red",shadecol=rgb(1,0.2,0.2,alpha=0.3))
   plot(env.g,add=TRUE,col=c("black",rep("darkgreen",3)),shadecol=rgb(0.2,1,0.2,alpha=0.3))
-  #abline(h=0,col="gold")
-#  legend("topleft",leg=c("gold","random","sphere","2 rings","1 ring"),
-#         col=c("black", "darkgreen","blue","red","orange"),
-#         lwd=5,lty=1,cex=0.6)
 }
 dev.off()
 
