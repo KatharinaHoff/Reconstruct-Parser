@@ -1,4 +1,4 @@
-# Analyse localisations Daten
+#Analyse localisations Daten
 # for paper Petersen et al., in preparation
 # Volkmar Liebscher
 # 2019-07-06
@@ -144,7 +144,7 @@ runifringspoint3<-function (n, radius=1, hdistance=0, jitter=0,nsim = 1, drop = 
 
 #plot simulation results for double checking
 #scale ratios similar to observed ones 
-pdf("phantomsin1.pdf")
+pdf("phantomsin2.pdf")
 #X11()
 #layout
 par(mfrow=c(2,2),mai=rep(0,4),oma=c(0,0,1,0))
@@ -155,14 +155,14 @@ plot(runifboxpoint3(n=1e3),main=NULL)#"complete randomness")
 plot(runifspherepoint3(n=1e3,jitter = 1/16),main=NULL)#"spherical,jittered")
 #plot(runifhalfspherepoint3(n=1e3),main="half spherical")
 #plot(runifringspoint3(n=1e3,hd=.125))#,main="two rings")
-plot(runifringspoint3(n=1e3,hd=.125,jit=1/16),main=NULL)#"two rings,jittered")
+plot(runifringspoint3(n=1e3,hd=0,jit=1/16),main=NULL)#"two rings,jittered")
 #plot(runifringspoint3(n=1e3,hd=0),main="one ring")
-plot(runifringspoint3(n=1e3,hd=0,jit=1/16),main=NULL)#"one ring, jittered")
+plot(runifringspoint3(n=1e3,hd=0,jit=4/16),main=NULL)#"one ring, jittered")
 dev.off()
 
 
 #pdf("gold_geometry_across_cells.pdf",one=TRUE)
-pdf("gold_geometry_across_cells%02d.pdf",one=FALSE)
+pdf("gold_geometry_across_cells_new%02d.pdf",one=FALSE)
 #Parameters for envelope - resolution of distance and No. of simulations
 nr<-2^8
 #for 5%pointwise confidence
@@ -170,12 +170,8 @@ ns<-1599
 nrank<-40
 #seed for simulations
 set.seed(123)
-#layout
-#par(mfrow=c(1,1),mai=c(0.5,0.7,0,0),oma=c(0,0,0,0))
-#rmax<-0.25
-#as observed
+
 #Names -now anonymous
-#nam<-lapply(names(a1),FUN=function(x) as.expression(bquote(atop("K function gold",.(x)))))
 nam<-c(paste("mutant cell No.",1:8),paste("WT cell No.",1:6))
 #jitter Distance(radius of cylinder)
 jr<-3.25e-2
@@ -193,25 +189,32 @@ for (i in 1:length(a1)){
   r.g<-0.5*max(unlist(lapply(list(xrange=range(pd$x),
                                   yrange=range(pd$y),
                                   zrange=range(pd$z)),FUN=diff)))
+  r.g2<-0.5*median(unlist(lapply(list(xrange=range(pd$x),
+                                      yrange=range(pd$y),
+                                      zrange=range(pd$z)),FUN=diff)))
   #envelops - CSR
   env.g<-envelope(p.g,K3est,nrval=nr,nsim=ns,nrank=nrank,VARIANCE = FALSE,correction="trans")
   #spere as comparison
   env.g1<-envelope(p.g,K3est,nrval=nr,nsim=ns,nrank=nrank,
                    simulate=expression(runifspherepoint3(radius=r.g,n=ng,jit=jr)),VARIANCE = FALSE,correction="trans")
-  #two rings as comparison
-  env.g2<-envelope(p.g,K3est,nrval=nr,nsim=ns,nrank=nrank,
-                   simulate=expression(runifringspoint3(radius=r.g,hd=0.25*r.g,n=ng,jit=jr)),VARIANCE = FALSE,correction="trans")
   #one ring as comparison
-  env.g3<-envelope(p.g,K3est,nrval=nr,nsim=ns,nrank=nrank,
+  env.g2<-envelope(p.g,K3est,nrval=nr,nsim=ns,nrank=nrank,
                    simulate=expression(runifringspoint3(radius=r.g,hd=0,n=ng,jit=jr)),VARIANCE = FALSE,correction="trans")
-  #gold - important
-  # for test : print(paste(i,":",nam[[i]]))
+  #more jittering
+  env.g3<-envelope(p.g,K3est,nrval=nr,nsim=ns,nrank=nrank,
+                   simulate=expression(runifringspoint3(radius=r.g,hd=0,n=ng,jit=2*jr)),VARIANCE = FALSE,correction="trans")
+  #even more jittering
+  env.g4<-envelope(p.g,K3est,nrval=nr,nsim=ns,nrank=nrank,
+                   simulate=expression(runifringspoint3(radius=r.g,hd=0,n=ng,jit=3*jr)),VARIANCE = FALSE,correction="trans")
+  
+  #K functions for gold particles with envelops - important
   plot(env.g,main=nam[[i]],legend=FALSE,shade=NULL,add=FALSE,xlim=c(0,0.5*r.g),
        xlab=expression(italic(r)~group("[",{mu*m},"]")),
        ylab=expression(K[3](r)))
   plot(env.g1,add=TRUE,col="blue",shadecol=rgb(0,0,1,alpha=0.3))
-  plot(env.g2,add=TRUE,col="orange",shadecol=rgb(1,1,0,alpha=0.3))
+  plot(env.g4,add=TRUE,col="red",shadecol=rgb(1,0.2,1,alpha=0.3))
   plot(env.g3,add=TRUE,col="red",shadecol=rgb(1,0.2,0.2,alpha=0.3))
+  plot(env.g2,add=TRUE,col="orange",shadecol=rgb(1,1,0,alpha=0.3))
   plot(env.g,add=TRUE,col=c("black",rep("darkgreen",3)),shadecol=rgb(0.2,1,0.2,alpha=0.3))
 }
 dev.off()
